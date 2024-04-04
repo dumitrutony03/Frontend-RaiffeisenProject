@@ -1,22 +1,24 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import LoginPage from './components/LoginPage';
-import SignupPage from './components/SignUpPage';
-import Dashboard from "./components/Dashboard";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Login from './components/Login';
+import InvestorProfile from './components/InvestorProfile';
+import LandingPage from "./components/LandingPage";
+import AdminProfile from "./components/AdminProfile";
+// import StartupProfile from './components/StartupProfile';
+// import AdminProfile from './components/AdminProfile';
 
 function App() {
     return (
-        <div className="App">
-            <Router>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/login" element={<Login/>} />
+                <Route path="/investorProfile" element={<InvestorProfile />} />
+                {/*<Route path="/startupProfile" element={<StartupProfile />} />*/}
 
-                <Routes>
-                    <Route path="/" element={<LoginPage/>} />
-                    <Route path="/signup" element={ <SignupPage/>} />
-                    <Route path = "/dashboard" element={<Dashboard/>}/>
-                </Routes>
-
-            </Router>
-        </div>
+                <Route path="/adminProfile" element={<AdminProfile />} />
+            </Routes>
+        </BrowserRouter>
     );
 }
 
