@@ -1,25 +1,23 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Login from './components/Login';
-import InvestorProfile from './components/InvestorProfile';
-import LandingPage from "./components/LandingPage";
-import AdminProfile from "./components/AdminProfile";
-// import StartupProfile from './components/StartupProfile';
-// import AdminProfile from './components/AdminProfile';
+import React from 'react'
+import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom'
+// import PrivateRoute from './components/misc/PrivateRoute'
+import Login from './components/home/Login'
+import WelcomePage from "./components/WelcomePage";
+// import Signup from './components/home/Signup'
+// import AdminPage from './components/admin/AdminPage'
+// import UserPage from './components/user/UserPage'
 
 function App() {
     return (
-        <BrowserRouter>
+        <Router>
             <Routes>
-                <Route path="/" element={<LandingPage />} />
-                <Route path="/login" element={<Login/>} />
-                <Route path="/investorProfile" element={<InvestorProfile />} />
-                {/*<Route path="/startupProfile" element={<StartupProfile />} />*/}
-
-                <Route path="/adminProfile" element={<AdminProfile />} />
+                {/*Caile unde putem ajunge*/}
+                <Route path='/' element={<WelcomePage/>}/>
+                <Route path='/login' element={<Login/>}/>
+                <Route path="*" element={<Navigate to="/"/>}/>
             </Routes>
-        </BrowserRouter>
-    );
+        </Router>
+    )
 }
 
-export default App;
+export default App
