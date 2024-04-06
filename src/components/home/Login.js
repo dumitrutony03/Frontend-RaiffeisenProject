@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
 
 function LoginForm() {
@@ -6,23 +6,23 @@ function LoginForm() {
         email: '',
         password: ''
     });
+    const [product, setProduct] = useState(null);
+
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setInvestor(prevState => ({
             ...prevState,
             [name]: value
         }));
     };
 
-    const returnToken = () =>{
-        return localStorage.getItem('token')
+    const returnToken = () => {
+        return localStorage.getItem("token");
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const apiUrl = 'http://localhost:8080/api/auth/authenticate';
-
         // BEST PRACTICE
 
         // axios.post(apiUrl, investor).then(
@@ -36,9 +36,35 @@ function LoginForm() {
         // });
 
         try {
-            const response = await axios.post(apiUrl, investor, {'Authorization': 'Bearer ' + returnToken()});
+            var token = returnToken();
 
-            console.log(response.data)
+            const apiUrl = 'http://localhost:8080/api/auth/authenticate';
+            const response = await axios.post(apiUrl, investor,
+                {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                }
+            );
+
+            const usersRole = response.data.role;
+
+            if (usersRole === "STARTUP"){
+
+            }else if (usersRole === "INVESTOR"){
+
+            }else{
+                // navigate to the designed page.
+            }
+
+            console.log("Token: " + token)
+            const apiUrlAdmin = 'http://localhost:8080/api/admin/nrOfUsers';
+            const responseADMIN = await axios.get(apiUrlAdmin, {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            });
+            console.log(responseADMIN);
 
             // Reset form or provide further user feedback
         } catch (error) {
@@ -66,6 +92,7 @@ function LoginForm() {
             />
             <button type="submit">User Login</button>
         </form>
+
     );
 }
 

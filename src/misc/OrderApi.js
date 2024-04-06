@@ -7,8 +7,9 @@ export const orderApi = {
     signup,
 }
 
-function authenticate(username, password) {
-    return axios.post('http://localhost:8080/api/auth/authenticate', { username, password });
+function authenticate(username, password, token) {
+    const apiUrl = 'http://localhost:8080/api/auth/authenticate';
+    return axios.post(apiUrl, { username, password }, {'Authorization': 'Bearer ' + token});
 }
 
 function signup(user) {
