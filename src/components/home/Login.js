@@ -47,7 +47,9 @@ function LoginForm() {
                     }
                 }
             );
+            e.target.reset()
 
+            // RENEW THE LAST TOKEN, OBVIOUSLY IT IS EXPIRED AFTER 1 HOUR!
             console.log(response.data.token);
             const newToken = response.data.token;
 
@@ -62,18 +64,21 @@ function LoginForm() {
             );
 
 
+            user.email='';
+            user.password='';
+
             const usersRole = responsee.data.role;
+            localStorage.setItem("role", usersRole)
 
             // ####### NAVIGATE to the designed page.
             if (usersRole === "STARTUP"){
 
             }else if (usersRole === "INVESTOR"){
+                navigate("/investorsPage")
 
             }else{
                 // ADMIN - poate inregistra STARTUP SI INVESTOR
-
                 navigate("/adminPage");
-                return;
             }
             // Reset form or provide further user feedback
         } catch (error) {
