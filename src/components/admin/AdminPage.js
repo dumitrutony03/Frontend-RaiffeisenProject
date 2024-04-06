@@ -6,11 +6,11 @@ import axios from "axios";
 function AdminPage() {
     const navigate = useNavigate();
 
-    useEffect(() => {
-        // Check if the role stored in localStorage is not "ADMIN"
-        if(localStorage.getItem("role") !== "ADMIN") {
-            // Redirect to some other page if not "ADMIN"
-            navigate("/" + localStorage.getItem("role"));
+        useEffect(() => {
+            // Check if the role stored in localStorage is not "ADMIN"
+            if(localStorage.getItem("role") !== "ADMIN") {
+                // Redirect to some other page if not "ADMIN"
+                navigate("/" + localStorage.getItem("role"));
         }
         // Additional logic for the admin page can go here
     }, [navigate]); // Dependency array includes navigate to re-run if navigate changes
@@ -45,11 +45,16 @@ function AdminPage() {
                 console.log("Ce am primit in INPUT in UI:" + userRegister.name);
 
                 const apiUrlAdmin = 'http://localhost:8080/api/admin/register';
-                const responseRegisterADMIN = await axios.post(apiUrlAdmin, userRegister,{
+                const responseRegisterADMIN = await axios.post
+                (
+                    apiUrlAdmin,
+                    userRegister,
+                    {
                     headers: {
                         'Authorization': 'Bearer ' + token
                     }
-                });
+                    }
+                );
                 console.log(responseRegisterADMIN.data);
             }
 

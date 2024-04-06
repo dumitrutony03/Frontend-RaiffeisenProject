@@ -63,10 +63,6 @@ function LoginForm() {
                 }
             );
 
-
-            user.email='';
-            user.password='';
-
             const usersRole = responsee.data.role;
             localStorage.setItem("role", usersRole)
 
@@ -74,7 +70,8 @@ function LoginForm() {
             if (usersRole === "STARTUP"){
 
             }else if (usersRole === "INVESTOR"){
-                navigate("/investorsPage")
+                console.log("Mergem spre pagina investitorului")
+                navigate("/investorPage")
 
             }else{
                 // ADMIN - poate inregistra STARTUP SI INVESTOR
