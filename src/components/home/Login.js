@@ -1,17 +1,18 @@
 import React, {useState} from 'react';
 import axios from 'axios';
+import {Route, useNavigate} from "react-router-dom";
+
 
 function LoginForm() {
-    const [investor, setInvestor] = useState({
+    let navigate = useNavigate();
+
+    const [user, setUser] = useState({
         email: '',
         password: ''
     });
-    const [product, setProduct] = useState(null);
-
-
     const handleChange = (e) => {
         const {name, value} = e.target;
-        setInvestor(prevState => ({
+        setUser(prevState => ({
             ...prevState,
             [name]: value
         }));
@@ -25,7 +26,7 @@ function LoginForm() {
         e.preventDefault();
         // BEST PRACTICE
 
-        // axios.post(apiUrl, investor).then(
+        // axios.post(apiUrl, user).then(
         //
         //
         //     (response)=>{
@@ -39,7 +40,7 @@ function LoginForm() {
             var token = returnToken();
 
             const apiUrl = 'http://localhost:8080/api/auth/authenticate';
-            const response = await axios.post(apiUrl, investor,
+            const response = await axios.post(apiUrl, user,
                 {
                     headers: {
                         'Authorization': 'Bearer ' + token
@@ -47,26 +48,33 @@ function LoginForm() {
                 }
             );
 
-            const usersRole = response.data.role;
+            console.log(response.data.token);
+            const newToken = response.data.token;
 
+            localStorage.setItem("token", newToken);
+
+            const responsee = await axios.post(apiUrl, user,
+                {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                }
+            );
+
+
+            const usersRole = responsee.data.role;
+
+            // ####### NAVIGATE to the designed page.
             if (usersRole === "STARTUP"){
 
             }else if (usersRole === "INVESTOR"){
 
             }else{
-                // navigate to the designed page.
-                // ADMIN
+                // ADMIN - poate inregistra STARTUP SI INVESTOR
+
+                navigate("/adminPage");
+                return;
             }
-
-            console.log("Token: " + token)
-            const apiUrlAdmin = 'http://localhost:8080/api/admin/nrOfUsers';
-            const responseADMIN = await axios.get(apiUrlAdmin, {
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                }
-            });
-            console.log(responseADMIN);
-
             // Reset form or provide further user feedback
         } catch (error) {
             console.error('There was an error!', error);
@@ -78,7 +86,7 @@ function LoginForm() {
             <input
                 type="email"
                 name="email"
-                value={investor.email}
+                value={user.email}
                 onChange={handleChange}
                 placeholder="Email"
                 required
@@ -86,7 +94,7 @@ function LoginForm() {
             <input
                 type="password"
                 name="password"
-                value={investor.password}
+                value={user.password}
                 onChange={handleChange}
                 placeholder="Password"
                 required
