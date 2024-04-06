@@ -55,6 +55,7 @@ function LoginForm() {
 
             }else{
                 // navigate to the designed page.
+                // ADMIN
             }
 
             console.log("Token: " + token)
