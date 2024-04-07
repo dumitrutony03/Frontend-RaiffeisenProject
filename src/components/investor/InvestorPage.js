@@ -40,7 +40,7 @@ const InvestorPage = () => {
         <div>
             <button onClick={handleChange}>Test API Call</button>
             <p>name: {investorDetails.name}</p>
-            <p>name: {investorDetails.email}</p>
+            <p>email: {investorDetails.email}</p>
             {error && <p>Error: {error}</p>}
         </div>
     );
