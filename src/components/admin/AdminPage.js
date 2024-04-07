@@ -25,6 +25,13 @@ function AdminPage() {
         role: '',
     });
 
+    const adminLogout = async () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        // Optionally, navigate to the login page
+        navigate('/login');
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setUserRegister((prevState) => ({
@@ -43,6 +50,8 @@ function AdminPage() {
     };
 
     const [errorMessage, setErrorMessage] = useState(''); // State to display error message
+
+
 
     const registerInvestorAndStartup = async (e) => {
         e.preventDefault();
@@ -81,6 +90,8 @@ function AdminPage() {
 
     return (
         <Container>
+            <button onClick={adminLogout}>LOGOUT</button>
+
             {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
             <form onSubmit={registerInvestorAndStartup}>
                 <input

@@ -5,6 +5,11 @@ import {useNavigate} from "react-router-dom"; // Import useTable hook
 
 const StartupPage = () => {
     const [investors, setInvestors] = useState([]);
+    // const investors = [
+    //     { name: 'John Doe', email: 'john.doe@example.com' },
+    //     { name: 'Jane Smith', email: 'jane.smith@example.com' },
+    //     // ... other investors
+    // ];
     const [error, setError] = useState(null);
 
     const navigate = useNavigate();
@@ -14,24 +19,41 @@ const StartupPage = () => {
             // Redirect to some other page if not "ADMIN"
             navigate("/" + localStorage.getItem("role"));
         }
+        console.log("StartupPage")
         // Additional logic for the admin page can go here
     }, [navigate]); // Dependency array includes navigate to re-run if navigate changes
 
+    const startupLogout = async () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        // Optionally, navigate to the login page
+        navigate('/login');
+    };
 
+    // Se intampla automat, cand suntem directionati spre /startupPage
     useEffect(() => {
         const fetchData = async () => {
+            console.log("Requesting the investors")
             try {
-                const response = await axios.get('http://localhost:8080/api/startups/allInvestors');
+                // const response = await axios.post('http://localhost:8080/api/startups/allInvestors');
+
+                const token = localStorage.getItem("token");
+
+                const apiUrl = 'http://localhost:8080/api/startups/allInvestors';
+                const response = await axios.post(apiUrl, token, {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
                 setInvestors(response.data);
-                console.log(response.data)
             } catch (error) {
                 console.error(error);
                 setError(error.message);
             }
         };
-
         fetchData();
-    }, []);
+    }, []); // [] // Empty dependency array to prevent unnecessary re-renders
+
 
     // Define table columns
     const columns = React.useMemo(
@@ -60,7 +82,9 @@ const StartupPage = () => {
 
     return (
         <div>
-            <h2>Investors</h2>
+            <button onClick={startupLogout}>LOGOUT</button>
+            <h1> Startup Page </h1>
+            <h2>Investors table ---></h2>
             <table {...getTableProps()}>
                 <thead>
                 {headerGroups.map((headerGroup) => (
@@ -89,6 +113,18 @@ const StartupPage = () => {
             {/* Add any additional content or functionalities here */}
         </div>
     );
+    // return (
+    //     <div>
+    //         <h2>Investors</h2>
+    //         <ul>
+    //             {investors.map((investor) => (
+    //                 <li key={investor.id}> {/* Assuming 'id' exists in each investor */}
+    //                     {investor.name} - {investor.email}
+    //                 </li>
+    //             ))}
+    //         </ul>
+    //     </div>
+    // );
 };
 
 export default StartupPage;

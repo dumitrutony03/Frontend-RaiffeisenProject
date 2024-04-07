@@ -19,29 +19,45 @@ const InvestorPage = () => {
         // Additional logic for the admin page can go here
     }, [navigate]); // Dependency array includes navigate to re-run if navigate changes
 
-    const handleChange = async () => {
-        try {
-            const token = localStorage.getItem("token");
+    // Afisam detaliile investitorului LOGAT, pe pagina acestuia
 
-            const apiUrl = 'http://localhost:8080/api/investors/investorDetails';
-            const response = await axios.post(apiUrl, token, {
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                }
-            });
-            // setResponseData(response.data); // ce primim din backend ca raspuns la http request
-            setInvestorDetails(response.data)
-        } catch (error) {
-            setError(error.message);
-        }
+    useEffect( () => {
+        const handleChange = async () => {
+            try {
+                const token = localStorage.getItem("token");
+
+                const apiUrl = 'http://localhost:8080/api/investors/investorDetails';
+                const response = await axios.post(apiUrl, token, {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+                // setResponseData(response.data); // ce primim din backend ca raspuns la http request
+                setInvestorDetails(response.data)
+            } catch (error) {
+                setError(error.message);
+            }
+        };
+        handleChange();
+    }, []);
+
+    const investorLogout = async () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        // Optionally, navigate to the login page
+        navigate('/login');
     };
 
     return (
         <div>
-            <button onClick={handleChange}>Test API Call</button>
+            <button onClick={investorLogout}>LOGOUT</button>
+            <h2>Investor's Details: </h2>
             <p>name: {investorDetails.name}</p>
             <p>email: {investorDetails.email}</p>
             {error && <p>Error: {error}</p>}
+
+            {/*// Buton de LOGOUT*/}
+
         </div>
     );
 };
