@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Route, useNavigate } from 'react-router-dom';
+import './LoginForm.css';
 
 function LoginForm() {
     let navigate = useNavigate();
@@ -56,12 +57,12 @@ function LoginForm() {
 
             // Navigate to appropriate page based on role
             if (usersRole === 'STARTUP') {
-                navigate('/startupPage');
+                navigate('/STARTUP');
             } else if (usersRole === 'INVESTOR') {
-                navigate('/investorPage');
+                navigate('/INVESTOR');
             } else {
                 // Admin or other role - adapt navigation logic
-                navigate('/adminPage');
+                navigate('/ADMIN');
             }
         } catch (error) {
             console.error('There was an error!', error);

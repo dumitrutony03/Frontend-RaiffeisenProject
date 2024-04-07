@@ -1,16 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import { useTable } from 'react-table';
-import {useNavigate} from "react-router-dom"; // Import useTable hook
+import {useTable} from 'react-table';
+import {useNavigate} from "react-router-dom";
+import "./StartupPage.css";
 
 const StartupPage = () => {
     const [investors, setInvestors] = useState([]);
-    // const investors = [
-    //     { name: 'John Doe', email: 'john.doe@example.com' },
-    //     { name: 'Jane Smith', email: 'jane.smith@example.com' },
-    //     // ... other investors
-    // ];
     const [error, setError] = useState(null);
+    const [errorSendData, setErrorSendData] = useState(null);
 
     const navigate = useNavigate();
     useEffect(() => {
@@ -54,21 +51,66 @@ const StartupPage = () => {
         fetchData();
     }, []); // [] // Empty dependency array to prevent unnecessary re-renders
 
+    const returnToken = () => {
+        return localStorage.getItem('token');
+    };
+
+    const handleCellClick = (investorData) => {
+        // e.preventDefault();
+
+        console.log(investorData.name);
+        console.log(investorData.email);
+        console.log(investorData);
+
+        const name = investorData.name;
+        const email = investorData.email;
+
+        try {
+            const token = returnToken();
+            if (token) {
+                const apiUrl = 'http://localhost:8080/api/startups/sendMentoringEmailToInvestor';
+                const responseFromServer = axios.post(apiUrl,
+                    {token, name, email},
+                    {
+                        headers: {
+                            'Authorization': 'Bearer ' + token,
+                        },
+                    }
+                )
+                console.log("Raspuns din server side: " + responseFromServer);
+            } else {
+                console.log("Token invalid");
+            }
+
+        } catch (errorSendData) {
+            console.error('There was an error!', investorData);
+            setErrorSendData('An error occurred during registration. Please verify email and password input.', error.response.data);
+        }
+    };
 
     // Define table columns
     const columns = React.useMemo(
         () => [
             {
                 Header: 'Name',
-                accessor: (investor) => investor.name, // Assuming 'name' exists in InvestorDto
+                accessor: 'name', // You can directly use 'name' if it directly maps to your data structure
+                Cell: ({row}) => (
+                    <div onClick={() => handleCellClick(row.original)} style={{cursor: 'pointer'}}>
+                        {row.values.name}
+                    </div>
+                ),
             },
             {
                 Header: 'Email',
-                accessor: (investor) => investor.email, // Assuming 'email' exists in InvestorDto
+                accessor: 'email',
+                Cell: ({row}) => (
+                    <div onClick={() => handleCellClick(row.original)} style={{cursor: 'pointer'}}>
+                        {row.values.email}
+                    </div>
+                ),
             },
-            // Add more columns as needed based on your InvestorDto structure
         ],
-        [] // Empty dependency array to prevent unnecessary re-renders
+        [] // Dependency array left empty to signify these don't depend on external variables
     );
 
     // Use the useTable hook
@@ -78,7 +120,7 @@ const StartupPage = () => {
         headerGroups,
         rows,
         prepareRow,
-    } = useTable({ columns, data: investors });
+    } = useTable({columns, data: investors});
 
     return (
         <div>
@@ -113,18 +155,6 @@ const StartupPage = () => {
             {/* Add any additional content or functionalities here */}
         </div>
     );
-    // return (
-    //     <div>
-    //         <h2>Investors</h2>
-    //         <ul>
-    //             {investors.map((investor) => (
-    //                 <li key={investor.id}> {/* Assuming 'id' exists in each investor */}
-    //                     {investor.name} - {investor.email}
-    //                 </li>
-    //             ))}
-    //         </ul>
-    //     </div>
-    // );
 };
 
 export default StartupPage;

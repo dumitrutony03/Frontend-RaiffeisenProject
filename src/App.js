@@ -14,9 +14,9 @@ function App() {
                 {/*Caile unde putem ajunge*/}
                 <Route path='/' element={<WelcomePage/>}/>
                 <Route path='/login' element={<Login/>}/>
-                <Route path='/adminPage' element={<AdminPage/>}/>
-                <Route path='/investorPage' element={<InvestorPage/>}/>
-                <Route path='/startupPage' element={<StartupPage/>}/>
+                <Route path='/ADMIN' element={<AdminPage/>}/>
+                <Route path='/INVESTOR' element={<InvestorPage/>}/>
+                <Route path='/STARTUP' element={<StartupPage/>}/>
                 <Route path="*" element={<Navigate to="/"/>}/>
             </Routes>
         </Router>
