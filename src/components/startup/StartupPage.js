@@ -32,8 +32,6 @@ const StartupPage = () => {
         const fetchData = async () => {
             console.log("Requesting the investors")
             try {
-                // const response = await axios.post('http://localhost:8080/api/startups/allInvestors');
-
                 const token = localStorage.getItem("token");
 
                 const apiUrl = 'http://localhost:8080/api/startups/allInvestors';
@@ -68,15 +66,16 @@ const StartupPage = () => {
         try {
             const token = returnToken();
             if (token) {
-                const apiUrl = 'http://localhost:8080/api/startups/sendMentoringEmailToInvestor';
-                const responseFromServer = axios.post(apiUrl,
+                const apiUrl = 'http://localhost:8080/api/startups/s';
+                const responseFromServer = axios.post(
+                    apiUrl,
                     {token, name, email},
                     {
                         headers: {
                             'Authorization': 'Bearer ' + token,
                         },
-                    }
-                )
+                    },
+                );
                 console.log("Raspuns din server side: " + responseFromServer);
             } else {
                 console.log("Token invalid");
